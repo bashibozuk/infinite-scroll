@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table ,tr td{
+                border:1px solid red
+            }
+            tbody {
+                display:block;
+                height:150px;
+                overflow:auto;
+            }
+            thead, tbody tr {
+                display:table;
+                width:100%;
+                table-layout:fixed;/* even columns width , fix width of table too*/
+            }
+            thead {
+                width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
+            }
+            table {
+                width:400px;
+            }
+
+        </style>
+        <script src="rxjs.umd.min.js" type="text/javascript"></script>
+        <script src="scrollspy.js" type="text/javascript"></script>
+        <script src="datasource.js" type="text/javascript"></script>
+        <script src="pager.js" type="text/javascript"></script>
+        <script src="scrolled-pager.js" type="text/javascript"></script>
+        <script src="data-drawer.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        <script>
+            var ds = new DataSource(getDsData(100));
+            var pager = new ScrolledPager(ds, 20);
+            var drawer = new DataDrawer(document.querySelector('tbody'), pager);
+            drawer.draw();
+            var s = new ScrollSpy(document.querySelector('tbody'), 200);
+            s.start();
+            s.onScroll.subscribe((data) => {
+                console.log(data);
+                pager.onScroll(data);
+            });
+            
+            function getDsData(count) {
+                
+                const data = [];
+                while (count--) {
+                    data.push({
+                        id: 'ID - ' + count,
+                        name: 'Name - ' + count,
+                        age: '30 -' + count,
+                        data_1: 'Data 1 - ' + count,
+                        data_2: 'Data 2 - '  + count
+                    });
+                }
+
+                return data;
+            }
+        </script>
+    </body>
+</html>
